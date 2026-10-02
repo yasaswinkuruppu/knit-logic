@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#122448">
+  <meta name="description" content="Turn photographs into two-colour knitting designs, edit stitches, and generate KnitPaint numbers and yarn paths for three backing types.">
+  <title>Knit Logic — Jacquard workspace</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23122448'/%3E%3Cpath d='M6 9l5 13 5-13 5 13 5-13' fill='none' stroke='%238de138' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+:root{color-scheme:light;--ink:#142643;--muted:#5a687d;--navy:#122448;--blue:#2558ed;--line:#dee5ef;--surface:#fff;--yarn-a:#269fd2;--yarn-b:#87ce38;--cell-size:38px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px}*{box-sizing:border-box}body{margin:0;background:#f0f4fa;color:var(--ink);line-height:1.5}button,input,select{font:inherit}button{cursor:pointer}button,input,select{outline-offset:3px}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #2558ed}button{color:var(--ink)}.topbar{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:18px max(24px,calc((100vw - 1552px)/2));gap:20px}.brand{display:flex;gap:12px;align-items:center;font-weight:750;letter-spacing:-.025em;font-size:1.2rem}.brand-mark{display:grid;place-items:center;width:32px;height:32px;color:#99df42;border:1px solid #547049;border-radius:6px;font-size:1.5rem}.topbar-note{font-size:.875rem;color:#c8d5eb}main{max-width:1600px;padding:30px 24px 18px;margin:auto}.intro{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:24px}h1{font-size:clamp(1.65rem,2.5vw,2.15rem);line-height:1.2;letter-spacing:-.035em;margin:0 0 8px;font-weight:730}.intro p{margin:0;color:var(--muted)}.summary{border-left:3px solid var(--blue);padding-left:12px;font-size:.875rem;white-space:nowrap}.backing-panel{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:start;gap:6px 24px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:22px}.backing-field{border:0;padding:0;margin:0;min-width:0}legend,.order-control{font-size:.875rem;font-weight:650}legend{padding:0;margin-bottom:8px}.backing-options{display:flex;flex-wrap:wrap;gap:8px}.backing-option{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:7px;padding:9px 13px;font-size:.9375rem;cursor:pointer;position:relative;line-height:1.4}.backing-option:has(input:checked){background:#edf2ff;border-color:var(--blue);color:#173ebb;box-shadow:inset 0 0 0 1px var(--blue)}.backing-option:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:3px}.backing-option input{position:absolute;opacity:0;width:1px;height:1px}.backing-icon{height:18px;width:23px;border-radius:2px;flex-shrink:0}.horizontal-icon{background:repeating-linear-gradient(0deg,#269fd2 0 4px,#87ce38 4px 8px)}.vertical-icon{background:repeating-linear-gradient(90deg,#269fd2 0 4px,#87ce38 4px 8px)}.birdseye-icon{background:conic-gradient(#269fd2 25%,#87ce38 0 50%,#269fd2 0 75%,#87ce38 0);background-size:8px 8px}.order-control{display:flex;flex-direction:column;gap:8px}select{height:42px;border:1px solid var(--line);border-radius:7px;background:white;padding:0 12px;min-width:0;width:100%;color:var(--ink)}.backing-description{grid-column:1/-1;color:var(--muted);margin:4px 0 0;font-size:.875rem}.workbench{display:grid;grid-template-columns:minmax(300px,.94fr) minmax(380px,1.16fr) minmax(340px,1.1fr);gap:18px;align-items:start}.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;min-width:0;box-shadow:0 3px 14px #192b4510}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}.eyebrow{display:block;color:var(--blue);font-size:.75rem;font-weight:750;letter-spacing:.09em;margin-bottom:4px}h2{font-size:1.25rem;letter-spacing:-.025em;line-height:1.2;margin:0}.text-button{background:none;border:0;padding:6px 0;color:#244bd3;font-size:.875rem;font-weight:650;white-space:nowrap}.text-button:hover{text-decoration:underline}.secondary-button{border:1px solid #cdd7e6;background:#fff;border-radius:7px;font-size:.875rem;font-weight:600;padding:8px 12px;white-space:nowrap;min-height:38px}.secondary-button:hover{border-color:var(--blue);background:#f5f7ff}.dimensions{display:flex;align-items:end;gap:10px;margin-bottom:18px}.dimensions label{display:flex;flex-direction:column;font-size:.875rem;font-weight:600;gap:6px;flex:1;min-width:0}.dimensions input{width:100%;height:39px;border:1px solid #cdd7e6;border-radius:7px;padding:6px 9px;color:var(--ink)}.dimensions>span{align-self:end;margin-bottom:7px;color:var(--muted)}.brushes{display:grid;grid-template-columns:1fr 1fr;gap:9px}.brush-choice{position:relative;display:flex;gap:5px;align-items:center}.brush-button{background:white;border:1px solid var(--line);border-radius:7px;width:100%;display:flex;align-items:center;gap:7px;min-height:43px;padding:8px 30px 8px 9px;font-size:.875rem;font-weight:650}.brush-button.active{border:2px solid var(--blue);padding:7px 29px 7px 8px;background:#f0f4ff}.yarn-dot{width:15px;height:15px;border-radius:4px;flex-shrink:0}.yarn-a{background:var(--yarn-a)}.yarn-b{background:var(--yarn-b)}.brush-check{display:none}.brush-button.active .brush-check{display:inline;font-size:.875rem;color:var(--blue)}input[type=color]{position:absolute;right:7px;top:12px;width:21px;height:21px;padding:0;border:0;background:transparent;cursor:pointer}input[type=color]::-webkit-color-swatch-wrapper{padding:1px}input[type=color]::-webkit-color-swatch{border:1px solid #15294255;border-radius:3px}.editor-help{font-size:.875rem;margin:12px 0 18px;color:var(--muted)}.pattern-scroll{overflow:auto;padding:3px 0 9px;max-height:520px}.pattern-grid{display:grid;width:max-content;margin:auto;gap:0;user-select:none;touch-action:none}.pixel{width:var(--cell-size);height:var(--cell-size);padding:0;border:1px solid #24324a45;border-bottom:0;border-right:0;border-radius:0;position:relative;touch-action:none}.pixel.edge-right{border-right:1px solid #24324a45}.pixel.edge-bottom{border-bottom:1px solid #24324a45}.pixel:focus-visible{z-index:1;outline-offset:-3px;outline:3px solid #fff;box-shadow:inset 0 0 0 4px #122448}.grid-coordinate{display:grid;place-items:center;width:var(--cell-size);height:var(--cell-size);font-size:.875rem;color:var(--muted);flex-shrink:0}.grid-coordinate.course-coordinate{width:27px}.pattern-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;font-size:.875rem;color:var(--muted)}.repeat-note{background:#f5f8fc;color:#5c6675;font-size:.875rem;border-left:3px solid #6481b6;padding:9px 10px;margin:14px 0 0}.read-order{color:var(--muted);font-size:.875rem;margin:0 0 14px}.legend{display:flex;flex-wrap:wrap;gap:10px 13px;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:15px}.legend span{font-size:.875rem;display:flex;gap:6px;align-items:center;white-space:nowrap}.legend b{display:grid;place-items:center;border:1px solid #14264320;min-width:25px;height:25px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.875rem;color:var(--ink)}.code-1{background:#ffaaa9}.code-2{background:#99e5b5}.code-3{background:#fff281}.code-16{background:#9fe5f6}.chart-scroll{max-height:545px;overflow:auto;padding-bottom:4px}table{border-collapse:separate;border-spacing:3px;width:max-content;min-width:100%;font-size:.875rem}th{font-weight:550;color:var(--muted)}thead th{font-size:.75rem;height:25px}thead{position:sticky;top:0;background:white;z-index:1}.course-number{padding-right:9px;vertical-align:middle;border-right:1px solid var(--line);min-width:35px}.pass-name{padding:0 8px;min-width:36px;white-space:nowrap}.pass-name span{display:flex;gap:5px;align-items:center;justify-content:center}.pass-name i{width:8px;height:8px;border-radius:2px;display:inline-block}.stitch-cell{padding:0}.stitch-cell button{display:block;min-width:29px;width:100%;height:31px;border:1px solid #14264320;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:650;font-size:1rem;padding:1px 3px;color:#142643}.stitch-cell button:hover{border-color:#142643;box-shadow:inset 0 0 0 1px #142643}.stitch-cell button.selected{outline:2px solid #122448;outline-offset:0}.pair-start td{padding-top:5px}.chart-help{font-size:.875rem;color:var(--muted);line-height:1.5;margin:15px 0 0;min-height:42px}.notation-label{border:1px solid var(--line);border-radius:5px;padding:3px 6px;font-size:.75rem;color:var(--muted);white-space:nowrap}.path-legend{display:flex;gap:18px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:14px;font-size:.875rem}.path-legend span{display:flex;align-items:center;gap:7px}.path-legend i{display:block;width:22px;height:3px}.paths-scroll{overflow:auto;max-height:545px}.paths-scroll svg{display:block;min-width:100%;width:auto}.message{font-size:.875rem;min-height:24px;margin:15px 4px 0;color:#284faa}footer{text-align:center;font-size:.875rem;color:#68758b;padding:5px 0 0}.notation-panel .chart-help{min-height:0}[hidden]{display:none!important}@media(min-width:1450px){:root{--cell-size:42px}.stitch-cell button{height:34px;min-width:32px}.workbench{grid-template-columns:minmax(320px,.94fr) minmax(405px,1.16fr) minmax(365px,1.1fr)}}@media(max-width:1160px){.workbench{grid-template-columns:minmax(310px,.85fr) minmax(380px,1.15fr)}.notation-panel{grid-column:1/-1}.paths-scroll svg{width:100%;max-width:650px;margin:auto}.paths-scroll{max-height:470px}}@media(max-width:760px){main{padding:24px 16px 14px}.topbar{padding:14px 16px}.intro{display:block;margin-bottom:20px}.summary{margin-top:14px;font-size:.875rem;white-space:normal}.backing-panel{padding:16px;grid-template-columns:1fr;gap:12px}.backing-options{gap:6px}.backing-option{padding:9px 10px;font-size:.875rem;flex:1;min-width:150px}.order-control{flex-direction:row;align-items:center;gap:14px}.order-control select{max-width:150px}.backing-description{margin:0}.workbench{display:flex;flex-direction:column;gap:16px}.panel{padding:18px;width:100%}.panel-heading{margin-bottom:16px}.editor-panel{order:0}.chart-panel{order:1}.notation-panel{order:2}.pattern-scroll{max-height:430px}.chart-scroll,.paths-scroll{max-height:500px}.paths-scroll svg{max-width:none;width:auto}.topbar-note{font-size:.75rem}.intro p{font-size:.9375rem}.secondary-button{padding:8px 10px}.brush-button{min-height:45px}.pattern-footer{align-items:start}.notation-label{font-size:.75rem}h2{font-size:1.2rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.photo-import{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:18px 0 0;padding:12px 0}.photo-import summary{font-size:.9375rem;font-weight:650;cursor:pointer}.photo-body{padding-top:12px}.photo-file{display:block;max-width:100%;width:100%;font-size:.875rem;color:var(--muted)}.photo-file::file-selector-button{font:inherit;font-weight:600;min-height:40px;padding:8px 10px;color:var(--ink);background:white;border:1px solid #cdd7e6;border-radius:6px;margin-right:8px;cursor:pointer}.photo-previews{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.photo-previews figure{margin:0;min-width:0}.photo-previews figcaption{font-size:.875rem;color:var(--muted);margin-bottom:6px}.photo-preview-frame{background:#f4f7fb;border:1px solid var(--line);border-radius:7px;display:flex;align-items:center;justify-content:center;height:120px;padding:7px;overflow:hidden}.photo-preview-frame img{display:block;max-width:100%;max-height:100%;object-fit:contain}.photo-preview-frame canvas{display:block;image-rendering:pixelated;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}.photo-fit-label{display:flex;flex-direction:column;gap:5px;font-size:.875rem;font-weight:600}.photo-fit-label select{height:38px}.photo-balance-label{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:.875rem}.photo-balance-label label{font-weight:600;flex:1}.photo-balance-label output{color:var(--muted);font-variant-numeric:tabular-nums}.photo-range{width:100%;min-height:32px;accent-color:var(--blue);margin:0 0 8px;cursor:pointer}.photo-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.primary-button{border:1px solid #244bd3;background:#244bd3;color:white;border-radius:7px;font-size:.875rem;font-weight:650;padding:8px 12px;min-height:39px;cursor:pointer}.primary-button:hover{background:#193eb8}.primary-button:disabled{background:#edf1f7;border-color:#d6deea;color:#69768a;cursor:default}.photo-status{font-size:.875rem;color:var(--muted);margin:10px 0 0;line-height:1.5;overflow-wrap:anywhere}.photo-status.is-error{color:#b22c34}.photo-import:has(#photo-settings:not([hidden])) .photo-status{min-height:40px}@media(pointer:coarse){.photo-file::file-selector-button,.photo-actions button,.photo-fit-label select{min-height:44px}.photo-range{min-height:44px}}
+.inspection-panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:18px}.inspection-form{display:flex;align-items:end;flex-wrap:wrap;gap:12px}.inspection-form strong{align-self:center;font-size:.9375rem;margin-right:auto}.inspection-form label{display:flex;flex-direction:column;font-size:.875rem;gap:5px;min-width:90px;flex:0 1 130px}.inspection-form input{width:100%;height:40px;border:1px solid #cdd7e6;border-radius:7px;padding:6px 9px;min-width:0}.inspection-form select{height:40px}.area-navigation{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:.875rem;color:var(--muted)}.area-navigation>div{display:flex;flex-wrap:wrap;gap:6px}.area-navigation button{padding:5px 10px;min-height:36px}button:disabled{cursor:default;opacity:.65}.dimensions{flex-wrap:wrap}.dimensions label{min-width:74px}.photo-dimensions{margin-bottom:9px}.aspect-control{font-size:.875rem;display:flex;gap:7px;align-items:center}.aspect-control input{width:17px;height:17px;accent-color:var(--blue)}.size-help{font-size:.875rem;color:var(--muted);margin:8px 0 12px;overflow-wrap:anywhere}.photo-preview-frame canvas{width:auto!important;height:auto!important;object-fit:contain}.export-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.export-actions button{flex:1}.export-actions .primary-button{white-space:normal}progress{width:100%;height:12px;margin-bottom:12px;accent-color:var(--blue)}.zoom-controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.zoom-controls output{font-size:.875rem;color:var(--muted);margin-left:auto}.zoom-controls select{width:100%;height:38px;font-size:.875rem}.design-view{height:360px;overflow:auto;background:#eef2f7;border:1px solid #cdd7e6;border-radius:7px;overscroll-behavior:contain;position:relative}.design-view.paint-mode{touch-action:none}.design-view canvas{position:sticky;left:0;top:0;display:block;cursor:grab;image-rendering:pixelated;outline-offset:-3px}.design-view.paint-mode canvas{cursor:crosshair}.exact-edit{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.875rem;color:var(--muted);margin-bottom:8px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.summary{white-space:normal;max-width:400px}.paths-scroll svg{width:auto;max-width:none;min-width:100%}.chart-panel .panel-heading{margin-bottom:14px}.photo-import:has(#photo-settings:not([hidden])) .photo-status{min-height:0}.photo-import #photo-source-size{margin-top:0}.workbench{grid-template-columns:minmax(320px,1fr) minmax(350px,1fr) minmax(330px,1fr)}@media(max-width:1160px){.workbench{grid-template-columns:minmax(310px,1fr) minmax(350px,1fr)}.notation-panel{grid-column:1/-1}.inspection-form strong{flex-basis:100%}}@media(max-width:760px){.inspection-panel{padding:16px}.inspection-form label{flex:1 1 40%;min-width:95px}.inspection-form>button{width:100%}.area-navigation>div{width:100%}.area-navigation button{flex:1;min-height:42px}.dimensions{gap:7px}.photo-dimensions>button{width:100%}.export-actions button{min-height:44px}.design-view{height:340px}.topbar-note{font-size:.875rem}}@media(pointer:coarse){.zoom-controls button,.exact-edit button{min-height:44px}}
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">▥</span><span>Knit Logic</span></div>
+    <span class="topbar-note">Two-colour jacquard</span>
+  </header>
+  <main>
+    <div class="intro"><div><h1>Your pattern, stitch by stitch.</h1><p>Convert a photo or draw a design. See its loops and KnitPaint numbers.</p></div><div class="summary" id="summary">6 needles · 6 courses · 12 output rows</div></div>
+    <section class="backing-panel" aria-label="Backing and yarn order">
+      <fieldset class="backing-field"><legend>Backing</legend><div class="backing-options">
+        <label class="backing-option"><input type="radio" name="backing" value="horizontal" checked><span class="backing-icon horizontal-icon" aria-hidden="true"></span><span>Horizontal stripe</span></label>
+        <label class="backing-option"><input type="radio" name="backing" value="vertical"><span class="backing-icon vertical-icon" aria-hidden="true"></span><span>Vertical stripe</span></label>
+        <label class="backing-option"><input type="radio" name="backing" value="birdseye"><span class="backing-icon birdseye-icon" aria-hidden="true"></span><span>Bird’s-eye</span></label>
+      </div></fieldset>
+      <label class="order-control">First yarn<select id="first-yarn"><option value="0">Yarn A</option><option value="1">Yarn B</option></select></label>
+      <p class="backing-description" id="backing-description">Both yarns knit on every back needle.</p>
+    </section>
+    <section class="inspection-panel" aria-label="Chart and yarn-path viewing area">
+      <form id="inspection-form" class="inspection-form">
+        <strong>Inspect an area</strong>
+        <label>From needle<input id="view-needle" type="number" min="1" value="1" required></label>
+        <label>From course<input id="view-course" type="number" min="1" value="1" required></label>
+        <label>Needles<select id="view-width"><option value="12">12</option><option value="24" selected>24</option><option value="48">48</option></select></label>
+        <label>Courses<select id="view-height"><option value="1">1</option><option value="6" selected>6</option><option value="12">12</option></select></label>
+        <button class="secondary-button" type="submit">Show area</button>
+      </form>
+      <div class="area-navigation"><span id="view-range">Needles 1–6 · Courses 1–6</span><div><button id="area-left" class="secondary-button" type="button" aria-label="Previous needle area">Left</button><button id="area-right" class="secondary-button" type="button" aria-label="Next needle area">Right</button><button id="area-down" class="secondary-button" type="button" aria-label="Lower courses">Lower</button><button id="area-up" class="secondary-button" type="button" aria-label="Higher courses">Higher</button></div></div>
+    </section>
+    <div class="workbench">
+      <section class="panel editor-panel" aria-labelledby="pattern-heading">
+        <div class="panel-heading"><div><span class="eyebrow">01 / DESIGN</span><h2 id="pattern-heading">Knitting design</h2></div><button id="example" class="text-button" type="button">Your example</button></div>
+        <form id="resize-form" class="dimensions"><label>Needles<input id="width" type="number" min="1" max="16384" value="6" required></label><span aria-hidden="true">×</span><label>Courses<input id="height" type="number" min="1" max="16384" value="6" required></label><button type="submit" class="secondary-button">Resize</button></form>
+        <div class="brushes" role="group" aria-label="Drawing yarn">
+          <div class="brush-choice"><button id="brush-a" class="brush-button active" aria-pressed="true" type="button"><span class="yarn-dot yarn-a"></span><span>Yarn A</span><span class="brush-check" aria-hidden="true">✓</span></button><input id="color-a" type="color" value="#269fd2" aria-label="Yarn A colour"></div>
+          <div class="brush-choice"><button id="brush-b" class="brush-button" aria-pressed="false" type="button"><span class="yarn-dot yarn-b"></span><span>Yarn B</span><span class="brush-check" aria-hidden="true">✓</span></button><input id="color-b" type="color" value="#87ce38" aria-label="Yarn B colour"></div>
+        </div>
+        <details class="photo-import" open>
+          <summary>Start from a photo</summary>
+          <div class="photo-body">
+            <input id="photo-file" class="photo-file" type="file" accept="image/*" aria-label="Choose a photo to pixelate">
+            <div id="photo-settings" hidden>
+              <p id="photo-source-size" class="photo-status"></p>
+              <div class="photo-previews">
+                <figure><figcaption>Photo</figcaption><div class="photo-preview-frame"><img id="photo-original" alt="Selected photo" hidden></div></figure>
+                <figure><figcaption id="photo-preview-size">Two-colour design</figcaption><div class="photo-preview-frame"><canvas id="photo-preview" width="6" height="6" role="img" aria-label="Two-colour pixelated photo preview"></canvas></div></figure>
+              </div>
+              <form id="photo-size-form" class="dimensions photo-dimensions"><label>Needles<input id="photo-width" type="number" min="1" max="16384" value="6" required></label><span aria-hidden="true">×</span><label>Courses<input id="photo-height" type="number" min="1" max="16384" value="6" required></label><button type="submit" class="secondary-button">Preview size</button></form>
+              <label class="aspect-control"><input id="photo-aspect" type="checkbox" checked>Keep photo proportions</label>
+              <p class="size-help">One design pixel = one needle × one course. Set the width for your knitting area.</p>
+              <label class="photo-fit-label">Framing<select id="photo-fit"><option value="contain">Full photo</option><option value="cover">Crop to fill</option></select></label>
+              <div class="photo-balance-label"><label for="photo-threshold">Light/dark balance</label><output id="photo-threshold-value" for="photo-threshold">127</output><button id="photo-auto" class="text-button" type="button">Auto</button></div>
+              <input id="photo-threshold" class="photo-range" type="range" min="0" max="255" value="127" step="1">
+              <div class="photo-actions"><button id="photo-swap" class="secondary-button" aria-pressed="false" type="button">Swap A/B</button><button id="photo-apply" class="primary-button" type="button" disabled>Use as pattern</button></div>
+            </div>
+            <p id="photo-status" class="photo-status" role="status" aria-live="polite">The preview starts at the uploaded image’s resolution. You can change its knitting size before applying it.</p>
+          </div>
+        </details>
+        <p class="editor-help" id="editor-help">Choose a yarn, then tap or drag to paint.</p>
+        <div class="pattern-scroll" id="small-editor"><div id="pattern-grid" class="pattern-grid" role="group" aria-label="Editable knitting pattern"></div></div>
+        <div id="large-editor" hidden>
+          <div class="zoom-controls"><button id="zoom-out" class="secondary-button" type="button" aria-label="Zoom out">−</button><button id="zoom-in" class="secondary-button" type="button" aria-label="Zoom in">+</button><button id="zoom-fit" class="secondary-button" type="button">Fit design</button><output id="zoom-label">Fit</output><label class="sr-only" for="canvas-mode">Design interaction</label><select id="canvas-mode"><option value="move">Move / inspect</option><option value="paint">Paint</option></select></div>
+          <div id="design-view" class="design-view"><div id="design-spacer"><canvas id="design-canvas" tabindex="0" role="img" aria-label="Zoomable knitting design"></canvas></div></div>
+          <p id="design-position" class="size-help">Tap the design to select an area. Zoom in to paint individual stitches.</p>
+          <div class="exact-edit"><button id="paint-selected" class="secondary-button" type="button">Paint selected stitch</button><span id="selected-stitch">Needle 1 · Course 1</span></div>
+        </div>
+        <div class="pattern-footer"><span>Course 1 starts at the bottom.</span><button type="button" id="fill" class="text-button">Fill A</button></div>
+        <p class="repeat-note" id="repeat-note" hidden></p>
+      </section>
+      <section class="panel chart-panel" aria-labelledby="chart-heading">
+        <div class="panel-heading"><div><span class="eyebrow">02 / PROGRAM</span><h2 id="chart-heading">Stitch numbers</h2></div></div>
+        <div class="export-actions"><button type="button" class="secondary-button" id="copy">Copy numbers</button><button type="button" class="primary-button" id="download">Download all numbers</button></div>
+        <progress id="export-progress" max="100" value="0" hidden aria-label="Number export progress"></progress>
+        <a id="export-link" class="text-button export-link" hidden>Save number file</a>
+        <p class="read-order" id="read-order">Read bottom to top · A, then B</p>
+        <div class="legend" aria-label="Stitch instruction legend"><span><b class="code-1">1</b>Front</span><span><b class="code-2">2</b>Back</span><span><b class="code-3">3</b>Both</span><span><b class="code-16">16</b>No knit</span></div>
+        <div class="chart-scroll" id="chart-scroll"><table id="number-chart" aria-label="KnitPaint stitch number chart"></table></div>
+        <p class="chart-help" id="chart-help">Select a number to inspect its needle action.</p>
+      </section>
+      <section class="panel notation-panel" aria-labelledby="notation-heading">
+        <div class="panel-heading"><div><span class="eyebrow">03 / UNDERSTAND</span><h2 id="notation-heading">Yarn paths</h2></div><span class="notation-label">Loop notation</span></div>
+        <p class="read-order">Back bed above · front bed below</p>
+        <div class="path-legend"><span><i class="yarn-a"></i>Yarn A</span><span><i class="yarn-b"></i>Yarn B</span></div>
+        <div class="paths-scroll" id="yarn-paths" aria-label="Yarn path diagrams for each course"></div>
+        <p class="chart-help">Yarn paths show the same selected area as the number chart. Each course contains two passes.</p>
+      </section>
+    </div>
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+    <footer>Two yarn passes = one design course.</footer>
+  </main>
+  <script type="module">
+const SAMPLE = [
+  [1, 0, 0, 0, 0, 1],
+  [1, 1, 0, 0, 1, 1],
+  [0, 1, 1, 1, 1, 0],
+  [0, 0, 1, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [1, 0, 0, 0, 0, 1],
+]; // Course 1 is at index 0; needle 1 is at index 0.
+
+const STITCHES = {
+  1: { label: 'Front knit only', front: true, back: false, color: '#ffaaa9' },
+  2: { label: 'Back knit only', front: false, back: true, color: '#99e5b5' },
+  3: { label: 'Front + back knit', front: true, back: true, color: '#fff281' },
+  16: { label: 'No knitting', front: false, back: false, color: '#9fe5f6' },
+};
+
+// Limits protect browser memory; they are not machine needle limits.
+const MAX_DESIGN_CELLS = 16000000;
+const MAX_DESIGN_EDGE = 16384;
+
+function validateDimensions(width, height) {
+  if (![width, height].every(n => Number.isInteger(n) && n >= 1 && n <= MAX_DESIGN_EDGE)) {
+    throw new Error(`Choose whole-number dimensions from 1 to ${MAX_DESIGN_EDGE.toLocaleString()}.`);
+  }
+  if (width * height > MAX_DESIGN_CELLS) {
+    throw new Error('Choose a design with at most 16 million pixels. Reduce the width or height.');
+  }
+  return { width, height };
+}
+
+function compactPattern(pattern) {
+  const { width, height } = validatePattern(pattern);
+  if (pattern.data instanceof Uint8Array) return { width, height, data: pattern.data.slice() };
+  const data = new Uint8Array(width * height);
+  pattern.forEach((row, y) => data.set(row, y * width));
+  return { width, height, data };
+}
+
+function pixelAt(pattern, course, needle) {
+  return pattern.data instanceof Uint8Array
+    ? pattern.data[course * pattern.width + needle] : pattern[course][needle];
+}
+
+function validatePattern(pattern) {
+  if (pattern?.data instanceof Uint8Array) {
+    const dimensions = validateDimensions(pattern.width, pattern.height);
+    if (pattern.data.length !== pattern.width * pattern.height || pattern.data.some(value => value > 1)) {
+      throw new Error('Pattern data must match its dimensions and contain only Yarn A (0) and Yarn B (1).');
+    }
+    return dimensions;
+  }
+  if (!Array.isArray(pattern) || pattern.length < 1) {
+    throw new Error('Choose a non-empty rectangular pattern.');
+  }
+  const width = pattern[0]?.length;
+  validateDimensions(width, pattern.length);
+  if (
+      pattern.some(row => !Array.isArray(row) || row.length !== width ||
+        row.some(value => value !== 0 && value !== 1))) {
+    throw new Error('Use a rectangular pattern containing only Yarn A (0) and Yarn B (1).');
+  }
+  return { width, height: pattern.length };
+}
+
+function createProgram(pattern, { backing = 'horizontal', firstYarn = 0 } = {}) {
+  const { width, height } = validatePattern(pattern);
+  if (!['horizontal', 'vertical', 'birdseye'].includes(backing)) {
+    throw new Error('Choose horizontal stripe, vertical stripe, or bird’s-eye backing.');
+  }
+  if (firstYarn !== 0 && firstYarn !== 1) throw new Error('Choose Yarn A or Yarn B first.');
+  function codeAt(course, needle, passIndex) {
+    if (!Number.isInteger(course) || course < 0 || course >= height ||
+        !Number.isInteger(needle) || needle < 0 || needle >= width || ![0, 1].includes(passIndex)) {
+      throw new Error('Choose an existing course, needle and yarn pass.');
+    }
+    const yarn = passIndex === 0 ? firstYarn : 1 - firstYarn;
+    const front = pixelAt(pattern, course, needle) === yarn;
+    const offset = backing === 'birdseye' ? course % 2 : 0;
+    const firstBack = (needle + offset) % 2 === 0;
+    const back = backing === 'horizontal' || (passIndex === 0 ? firstBack : !firstBack);
+    return (front ? 1 : 0) + (back ? 2 : 0) || 16;
+  }
+  function getPass(course, passIndex, startNeedle = 0, count = width - startNeedle) {
+    if (!Number.isInteger(count) || count < 1 || startNeedle + count > width) {
+      throw new Error('Choose a needle range within the design.');
+    }
+    const cells = Array.from({ length: count }, (_, i) => {
+      const code = codeAt(course, startNeedle + i, passIndex);
+      return { needle: startNeedle + i + 1, code, front: STITCHES[code].front, back: STITCHES[code].back };
+    });
+    return { course: course + 1, yarn: passIndex === 0 ? firstYarn : 1 - firstYarn,
+      pass: passIndex + 1, outputRow: course * 2 + passIndex + 1, cells };
+  }
+  return { width, height, outputRows: height * 2, codeAt, getPass };
+}
+
+// Compatibility helper for small charts. Large designs use createProgram so
+// millions of per-stitch objects are never retained.
+function convert(pattern, options = {}) {
+  const program = createProgram(pattern, options);
+  const { width, height } = program;
+  if (width * height > 100000) throw new Error('Use createProgram to inspect a large design in sections.');
+  const passes = [];
+  for (let c = 0; c < height; c++) for (let p = 0; p < 2; p++) passes.push(program.getPass(c, p));
+  return { width, height, passes };
+}
+
+function resizePattern(pattern, width, height, fill = 0) {
+  validateDimensions(width, height);
+  if (fill !== 0 && fill !== 1) throw new Error('Fill with Yarn A or Yarn B.');
+  const previous = validatePattern(pattern);
+  if (pattern.data instanceof Uint8Array) {
+    const data = new Uint8Array(width * height).fill(fill);
+    const copyWidth = Math.min(width, previous.width);
+    for (let y = 0; y < Math.min(height, previous.height); y++) {
+      data.set(pattern.data.subarray(y * previous.width, y * previous.width + copyWidth), y * width);
+    }
+    return { width, height, data };
+  }
+  return Array.from({ length: height }, (_, y) =>
+    Array.from({ length: width }, (_, x) => pattern[y]?.[x] ?? fill));
+}
+
+function* numberRows(program, startRow = 0, endRow = program.outputRows) {
+  // File order is the chart's top-to-bottom order. No headings or coordinates.
+  for (let displayRow = startRow; displayRow < endRow; displayRow++) {
+    const outputRow = program.outputRows - 1 - displayRow;
+    const course = Math.floor(outputRow / 2), passIndex = outputRow % 2;
+    const codes = new Array(program.width);
+    for (let x = 0; x < program.width; x++) codes[x] = program.codeAt(course, x, passIndex);
+    yield codes.join('\t');
+  }
+}
+
+// Pure photo-to-pattern helpers. RGBA samples arrive in image order (top to bottom).
+function photoSize(sourceWidth, sourceHeight) {
+  const scale = Math.min(1, MAX_DESIGN_EDGE / sourceWidth, MAX_DESIGN_EDGE / sourceHeight,
+    Math.sqrt(MAX_DESIGN_CELLS / (sourceWidth * sourceHeight)));
+  return validateDimensions(Math.max(1, Math.floor(sourceWidth * scale)), Math.max(1, Math.floor(sourceHeight * scale)));
+}
+function samplePlacement(sourceWidth, sourceHeight, width, height, fitting = 'contain') {
+  if (![sourceWidth, sourceHeight, width, height].every(n => Number.isFinite(n) && n > 0)) {
+    throw new Error('The photo and repeat must have positive dimensions.');
+  }
+  if (!['contain', 'cover'].includes(fitting)) throw new Error('Choose full photo or crop to fill.');
+  const scale = fitting === 'cover'
+    ? Math.max(width / sourceWidth, height / sourceHeight)
+    : Math.min(width / sourceWidth, height / sourceHeight);
+  const drawWidth = sourceWidth * scale, drawHeight = sourceHeight * scale;
+  return { x: (width - drawWidth) / 2, y: (height - drawHeight) / 2,
+    width: drawWidth, height: drawHeight };
+}
+
+function photoShades(rgba, width, height) {
+  validateDimensions(width, height);
+  if (rgba?.length !== width * height * 4) {
+    throw new Error('Photo samples must match the design dimensions.');
+  }
+  const shades = new Uint8Array(width * height);
+  for (let i = 0; i < rgba.length; i += 4) {
+    const alpha = rgba[i + 3] / 255;
+    const shade = 0.2126 * rgba[i] + 0.7152 * rgba[i + 1] + 0.0722 * rgba[i + 2];
+    shades[i / 4] = Math.round(shade * alpha + 255 * (1 - alpha));
+  }
+  return shades;
+}
+
+function automaticSplit(shades) {
+  if ((!Array.isArray(shades) && !(shades instanceof Uint8Array)) || !shades.length ||
+      shades.some(n => !Number.isInteger(n) || n < 0 || n > 255)) {
+    throw new Error('Photo shades must be values from 0 to 255.');
+  }
+  const histogram = Array(256).fill(0);
+  for (const shade of shades) histogram[shade]++;
+  if (histogram.filter(count => count > 0).length < 2) return 127;
+  const total = shades.length, sum = shades.reduce((a, b) => a + b, 0);
+  let darkCount = 0, darkSum = 0, bestScore = -1, firstBest = 0, lastBest = 0;
+  for (let threshold = 0; threshold < 255; threshold++) {
+    darkCount += histogram[threshold]; darkSum += threshold * histogram[threshold];
+    const lightCount = total - darkCount;
+    if (!darkCount || !lightCount) continue;
+    const separation = darkSum / darkCount - (sum - darkSum) / lightCount;
+    const score = darkCount * lightCount * separation * separation;
+    if (score > bestScore + 1e-7) {
+      bestScore = score; firstBest = threshold; lastBest = threshold;
+    } else if (Math.abs(score - bestScore) < 1e-7) lastBest = threshold;
+  }
+  return Math.floor((firstBest + lastBest) / 2);
+}
+
+function patternFromPhoto(shades, width, height, { threshold = 127, inverted = false, compact = false } = {}) {
+  validateDimensions(width, height);
+  if (shades?.length !== width * height ||
+      shades.some(n => !Number.isInteger(n) || n < 0 || n > 255)) {
+    throw new Error('Photo shades must match the design dimensions.');
+  }
+  if (!Number.isInteger(threshold) || threshold < 0 || threshold > 255 || typeof inverted !== 'boolean') {
+    throw new Error('Choose a light/dark balance from 0 to 255.');
+  }
+  const data = new Uint8Array(width * height);
+  for (let y = 0; y < height; y++) {
+    const sourceOffset = (height - 1 - y) * width, targetOffset = y * width;
+    for (let x = 0; x < width; x++) {
+      const yarn = shades[sourceOffset + x] <= threshold ? 0 : 1;
+      data[targetOffset + x] = inverted ? 1 - yarn : yarn;
+    }
+  }
+  if (compact) return { width, height, data };
+  return Array.from({ length: height }, (_, y) => Array.from(data.subarray(y * width, (y + 1) * width)));
+}
+
+
+const $ = id => document.getElementById(id);
+const state = { pattern: compactPattern(SAMPLE), backing: 'horizontal', firstYarn: 0,
+  brush: 0, colors: ['#269fd2', '#87ce38'] };
+const view = { needle: 1, course: 1, width: 24, height: 6 };
+const selected = { needle: 1, course: 1, pass: 0 };
+const zoom = { scale: 1, fit: true, pointer: null };
+const photo = { image: null, sourceUrl: null, shades: null, pending: null,
+  width: 0, height: 0, threshold: 127, inverted: false, auto: true,
+  token: 0, renderToken: 0, busy: false, limited: false, dirty: false };
+const yarnName = yarn => yarn === 0 ? 'A' : 'B';
+const fmt = n => n.toLocaleString();
+let output, painting = false, lastPainted = '', renderFrame = 0, canvasFrame = 0, exportBusy = false, exportUrl = null;
+const pause = () => new Promise(resolve => setTimeout(resolve, 0));
+const smallDesign = () => state.pattern.width <= 32 && state.pattern.height <= 32;
+function message(text) { $('message').textContent = text; }
+function photoStatus(text, error = false) {
+  $('photo-status').textContent = text;
+  $('photo-status').classList.toggle('is-error', error);
+  $('photo-status').setAttribute('role', error ? 'alert' : 'status');
+}
+function rgb(hex) { return [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)); }
+
+// Draw only a screen-sized sample, even when the design has millions of cells.
+function previewPattern(canvas, pattern, maxWidth = 320, maxHeight = 320) {
+  const scale = Math.min(1, maxWidth / pattern.width, maxHeight / pattern.height);
+  canvas.width = Math.max(1, Math.round(pattern.width * scale));
+  canvas.height = Math.max(1, Math.round(pattern.height * scale));
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('Photo preview is unavailable in this browser.');
+  const image = context.createImageData(canvas.width, canvas.height), colors = state.colors.map(rgb);
+  for (let y = 0; y < canvas.height; y++) {
+    const course = pattern.height - 1 - Math.min(pattern.height - 1, Math.floor(y * pattern.height / canvas.height));
+    for (let x = 0; x < canvas.width; x++) {
+      const needle = Math.min(pattern.width - 1, Math.floor(x * pattern.width / canvas.width));
+      const color = colors[pattern.data[course * pattern.width + needle]], i = (y * canvas.width + x) * 4;
+      image.data[i] = color[0]; image.data[i + 1] = color[1]; image.data[i + 2] = color[2]; image.data[i + 3] = 255;
+    }
+  }
+  context.putImageData(image, 0, 0);
+}
+function renderPhotoPreview() {
+  if (!photo.shades || photo.busy) return;
+  photo.pending = patternFromPhoto(photo.shades, photo.width, photo.height,
+    { threshold: photo.threshold, inverted: photo.inverted, compact: true });
+  previewPattern($('photo-preview'), photo.pending);
+  $('photo-preview-size').textContent = `${fmt(photo.width)} × ${fmt(photo.height)} design`;
+  $('photo-preview').setAttribute('aria-label', `${photo.width} by ${photo.height} two-colour photo preview`);
+  $('photo-threshold').value = photo.threshold;
+  $('photo-threshold-value').value = photo.threshold;
+  $('photo-threshold-value').textContent = photo.threshold;
+  $('photo-swap').setAttribute('aria-pressed', String(photo.inverted));
+  $('photo-apply').disabled = photo.dirty;
+  const data = photo.pending.data, first = data[0];
+  const twoYarns = data.some(value => value !== first);
+  const prefix = photo.limited ? 'This large image was reduced to fit the 16-million-pixel browser limit. ' : '';
+  photoStatus(photo.dirty ? 'Tap Preview size to rebuild the photo at the new dimensions.' : prefix + (twoYarns
+    ? `${fmt(photo.width)} needles × ${fmt(photo.height)} courses will produce ${fmt(photo.height * 2)} number rows. Apply when ready.`
+    : 'This preview uses one yarn. Adjust the light/dark balance to bring out the image.'));
+}
+async function refreshPhoto() {
+  if (!photo.image) return;
+  const token = ++photo.renderToken, source = photo.image;
+  photo.busy = true; photo.pending = null;
+  $('photo-apply').disabled = true; photoStatus('Building photo preview…');
+  try {
+    const { width, height } = validateDimensions(Number($('photo-width').value), Number($('photo-height').value));
+    const fitting = $('photo-fit').value;
+    await pause();
+    const shades = new Uint8Array(width * height);
+    // Sampling in strips avoids a full-resolution RGBA canvas on iPad.
+    const stripHeight = Math.min(256, Math.max(1, Math.floor(1048576 / width)));
+    const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = stripHeight;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) throw new Error('Photo conversion is unavailable in this browser.');
+    context.imageSmoothingEnabled = true; context.imageSmoothingQuality = 'high';
+    const placement = samplePlacement(source.naturalWidth, source.naturalHeight, width, height, fitting);
+    try {
+      for (let top = 0; top < height; top += stripHeight) {
+        if (token !== photo.renderToken) return;
+        const rows = Math.min(stripHeight, height - top);
+        context.fillStyle = '#ffffff'; context.fillRect(0, 0, width, stripHeight);
+        context.drawImage(source, placement.x, placement.y - top, placement.width, placement.height);
+        shades.set(photoShades(context.getImageData(0, 0, width, rows).data, width, rows), top * width);
+        if ((top / stripHeight) % 4 === 0) {
+          photoStatus(`Building photo preview… ${Math.round((top + rows) / height * 100)}%`);
+          await pause();
+        }
+      }
+    } finally { canvas.width = 1; canvas.height = 1; }
+    if (token !== photo.renderToken) return;
+    photo.width = width; photo.height = height; photo.shades = shades; photo.busy = false;
+    photo.dirty = Number($('photo-width').value) !== width || Number($('photo-height').value) !== height;
+    photo.limited = width !== source.naturalWidth || height !== source.naturalHeight ? photo.limited : false;
+    if (photo.auto) photo.threshold = automaticSplit(shades);
+    renderPhotoPreview();
+  } catch (error) {
+    if (token !== photo.renderToken) return;
+    photo.busy = false; photo.shades = null; photo.pending = null;
+    $('photo-apply').disabled = true;
+    photoStatus(error.message || 'The photo could not be converted. Try a smaller knitting size.', true);
+  }
+}
+
+function setBrush(yarn) {
+  state.brush = yarn;
+  ['brush-a', 'brush-b'].forEach((id, i) => {
+    $(id).classList.toggle('active', i === yarn);
+    $(id).setAttribute('aria-pressed', String(i === yarn));
+  });
+}
+function clampArea() {
+  view.needle = Math.max(1, Math.min(state.pattern.width, view.needle));
+  view.course = Math.max(1, Math.min(state.pattern.height, view.course));
+  selected.needle = Math.max(1, Math.min(state.pattern.width, selected.needle));
+  selected.course = Math.max(1, Math.min(state.pattern.height, selected.course));
+  $('view-needle').value = view.needle; $('view-needle').max = state.pattern.width;
+  $('view-course').value = view.course; $('view-course').max = state.pattern.height;
+  const endNeedle = Math.min(state.pattern.width, view.needle + view.width - 1);
+  const endCourse = Math.min(state.pattern.height, view.course + view.height - 1);
+  $('view-range').textContent = `Needles ${fmt(view.needle)}–${fmt(endNeedle)} of ${fmt(state.pattern.width)} · Courses ${fmt(view.course)}–${fmt(endCourse)} of ${fmt(state.pattern.height)}`;
+  $('area-left').disabled = view.needle === 1; $('area-right').disabled = endNeedle === state.pattern.width;
+  $('area-down').disabled = view.course === 1; $('area-up').disabled = endCourse === state.pattern.height;
+  return { startNeedle: view.needle - 1, count: endNeedle - view.needle + 1,
+    startCourse: view.course - 1, endCourse: endCourse - 1 };
+}
+function updatePixel(button) {
+  const row = Number(button.dataset.row), col = Number(button.dataset.col);
+  const yarn = state.pattern.data[row * state.pattern.width + col];
+  button.style.backgroundColor = state.colors[yarn];
+  button.setAttribute('aria-label', `Course ${row + 1}, needle ${col + 1}: Yarn ${yarnName(yarn)}`);
+}
+function renderGrid() {
+  const { width, height } = state.pattern, small = smallDesign();
+  $('width').value = width; $('height').value = height;
+  $('small-editor').hidden = !small; $('large-editor').hidden = small;
+  $('pattern-grid').innerHTML = '';
+  $('editor-help').textContent = small ? 'Choose a yarn, then tap or drag to paint.' : 'Fit the whole image, or zoom in to inspect and edit stitches.';
+  if (!small) { fitCanvas(); return; }
+  const grid = $('pattern-grid'); grid.style.gridTemplateColumns = `27px repeat(${width}, var(--cell-size))`;
+  const fragment = document.createDocumentFragment();
+  for (let y = height - 1; y >= 0; y--) {
+    const label = document.createElement('span'); label.className = 'grid-coordinate course-coordinate';
+    label.textContent = y + 1; label.setAttribute('aria-hidden', 'true'); fragment.append(label);
+    for (let x = 0; x < width; x++) {
+      const cell = document.createElement('button'); cell.type = 'button';
+      cell.className = `pixel${x === width - 1 ? ' edge-right' : ''}${y === 0 ? ' edge-bottom' : ''}`;
+      cell.dataset.row = y; cell.dataset.col = x; updatePixel(cell); fragment.append(cell);
+    }
+  }
+  fragment.append(document.createElement('span'));
+  for (let x = 1; x <= width; x++) {
+    const label = document.createElement('span'); label.className = 'grid-coordinate';
+    label.textContent = x; label.setAttribute('aria-hidden', 'true'); fragment.append(label);
+  }
+  grid.append(fragment);
+}
+function canvasBounds() {
+  const frame = $('design-view');
+  return { width: Math.max(1, frame.clientWidth), height: Math.max(1, frame.clientHeight) };
+}
+function fitCanvas() {
+  if (smallDesign()) return;
+  zoom.fit = true;
+  const bounds = canvasBounds();
+  zoom.scale = Math.min(42, bounds.width / state.pattern.width, bounds.height / state.pattern.height);
+  $('design-view').scrollLeft = 0; $('design-view').scrollTop = 0;
+  sizeCanvas();
+}
+function sizeCanvas() {
+  if (smallDesign()) return;
+  const bounds = canvasBounds(), canvas = $('design-canvas');
+  $('design-spacer').style.width = `${Math.max(bounds.width, state.pattern.width * zoom.scale)}px`;
+  $('design-spacer').style.height = `${Math.max(bounds.height, state.pattern.height * zoom.scale)}px`;
+  canvas.width = bounds.width; canvas.height = bounds.height;
+  canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`;
+  $('zoom-label').textContent = zoom.scale >= 1 ? `${zoom.scale.toFixed(0)} px / stitch` : `${(zoom.scale * 100).toFixed(1)}%`;
+  $('design-canvas').setAttribute('aria-label', `${state.pattern.width} needles by ${state.pattern.height} courses. Use arrow keys to select stitches, plus and minus to zoom, and Space to paint.`);
+  scheduleCanvas();
+}
+function scheduleCanvas() {
+  if (canvasFrame || smallDesign()) return;
+  canvasFrame = requestAnimationFrame(() => { canvasFrame = 0; drawCanvas(); });
+}
+function drawCanvas() {
+  if (smallDesign()) return;
+  const frame = $('design-view'), canvas = $('design-canvas'), context = canvas.getContext('2d');
+  if (!context) return;
+  const image = context.createImageData(canvas.width, canvas.height), palette = state.colors.map(rgb);
+  const { width, height, data } = state.pattern;
+  for (let y = 0; y < canvas.height; y++) {
+    const topRow = Math.floor((frame.scrollTop + y) / zoom.scale);
+    for (let x = 0; x < canvas.width; x++) {
+      const needle = Math.floor((frame.scrollLeft + x) / zoom.scale), i = (y * canvas.width + x) * 4;
+      const color = needle < width && topRow < height ? palette[data[(height - 1 - topRow) * width + needle]] : [238, 242, 247];
+      image.data[i] = color[0]; image.data[i + 1] = color[1]; image.data[i + 2] = color[2]; image.data[i + 3] = 255;
+    }
+  }
+  context.putImageData(image, 0, 0);
+  if (zoom.scale >= 8) {
+    context.strokeStyle = '#14264355'; context.lineWidth = 1; context.beginPath();
+    const endX = Math.min(canvas.width, width * zoom.scale - frame.scrollLeft);
+    const endY = Math.min(canvas.height, height * zoom.scale - frame.scrollTop);
+    for (let x = -(frame.scrollLeft % zoom.scale); x <= endX; x += zoom.scale) { context.moveTo(x, 0); context.lineTo(x, endY); }
+    for (let y = -(frame.scrollTop % zoom.scale); y <= endY; y += zoom.scale) { context.moveTo(0, y); context.lineTo(endX, y); }
+    context.stroke();
+  }
+  context.strokeStyle = '#ffffff'; context.lineWidth = 3;
+  const sx = (selected.needle - 1) * zoom.scale - frame.scrollLeft;
+  const sy = (height - selected.course) * zoom.scale - frame.scrollTop;
+  if (zoom.scale >= 4) { context.strokeRect(sx + 1, sy + 1, zoom.scale - 2, zoom.scale - 2); context.strokeStyle = '#122448'; context.lineWidth = 1; context.strokeRect(sx, sy, zoom.scale, zoom.scale); }
+}
+function setZoom(scale, anchor = null) {
+  if (smallDesign()) return;
+  const frame = $('design-view'), oldScale = zoom.scale, bounds = canvasBounds();
+  const center = anchor ?? { x: (frame.scrollLeft + bounds.width / 2) / oldScale, y: (frame.scrollTop + bounds.height / 2) / oldScale };
+  zoom.scale = Math.max(.01, Math.min(64, scale)); zoom.fit = false; sizeCanvas();
+  frame.scrollLeft = center.x * zoom.scale - bounds.width / 2;
+  frame.scrollTop = center.y * zoom.scale - bounds.height / 2;
+  scheduleCanvas();
+}
+function renderChart(area) {
+  let html = '<thead><tr><th scope="col">Course</th><th scope="col">Yarn</th>';
+  for (let n = area.startNeedle + 1; n <= area.startNeedle + area.count; n++) html += `<th scope="col">${n}</th>`;
+  html += '</tr></thead><tbody>';
+  for (let c = area.endCourse; c >= area.startCourse; c--) {
+    for (const p of [1, 0]) {
+      const pass = output.getPass(c, p, area.startNeedle, area.count);
+      html += `<tr class="${p === 1 ? 'pair-start' : ''}">`;
+      if (p === 1) html += `<th class="course-number" scope="rowgroup" rowspan="2">${pass.course}</th>`;
+      html += `<th class="pass-name" scope="row"><span><i style="background:${state.colors[pass.yarn]}"></i>${yarnName(pass.yarn)}</span></th>`;
+      for (const cell of pass.cells) {
+        const description = `Course ${pass.course}, Yarn ${yarnName(pass.yarn)}, needle ${cell.needle}: ${cell.code} — ${STITCHES[cell.code].label}`;
+        const active = selected.course === pass.course && selected.needle === cell.needle && selected.pass === p;
+        html += `<td class="stitch-cell"><button type="button" class="code-${cell.code}${active ? ' selected' : ''}" data-output-row="${pass.outputRow}" data-needle="${cell.needle}" aria-label="${description}" title="${description}">${cell.code}</button></td>`;
+      }
+      html += '</tr>';
+    }
+  }
+  $('number-chart').innerHTML = html + '</tbody>';
+}
+function passDrawing(pass, y) {
+  const left = 56, step = 39, backY = y + 16, frontY = y + 40, centerY = y + 28;
+  let path = `M ${left - 21} ${centerY}`, markers = '';
+  pass.cells.forEach((cell, i) => {
+    const x = left + i * step;
+    if (cell.front) path += ` L ${x - 7} ${frontY} C ${x - 15} ${frontY + 17},${x + 5} ${frontY + 17},${x - 2} ${frontY} L ${x + 2} ${frontY - 2}`;
+    if (cell.back) path += ` L ${x + 3} ${backY} C ${x - 4} ${backY - 17},${x + 16} ${backY - 17},${x + 9} ${backY} L ${x + 12} ${backY + 2}`;
+    if (!cell.front && !cell.back) path += ` L ${x + 12} ${centerY}`;
+    markers += `<line x1="${x + 6}" x2="${x + 6}" y1="${backY - 5}" y2="${backY + 5}" stroke="#a1adbd" stroke-width="1.5"/><line x1="${x - 4}" x2="${x - 4}" y1="${frontY - 5}" y2="${frontY + 5}" stroke="#a1adbd" stroke-width="1.5"/><text x="${x}" y="${y + 67}" text-anchor="middle" font-size="14" fill="#65738a">${cell.code}</text>`;
+  });
+  path += ` L ${left + pass.cells.length * step - 12} ${centerY}`;
+  return `<g data-path-row="${pass.outputRow}"><text x="12" y="${centerY + 5}" font-size="15" font-weight="600" fill="${state.colors[pass.yarn]}">${yarnName(pass.yarn)}</text>${markers}<path d="${path}" fill="none" stroke="${state.colors[pass.yarn]}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+}
+function renderPaths(area) {
+  const svgWidth = 100 + area.count * 39, groupHeight = 169, courses = area.endCourse - area.startCourse + 1;
+  let content = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgWidth} ${courses * groupHeight + 24}" width="${svgWidth}" height="${courses * groupHeight + 24}" role="img" aria-label="Yarn paths for courses ${area.startCourse + 1} through ${area.endCourse + 1}, needles ${area.startNeedle + 1} through ${area.startNeedle + area.count}">`;
+  for (let c = area.endCourse; c >= area.startCourse; c--) {
+    const groupY = (area.endCourse - c) * groupHeight;
+    content += `<g data-course="${c + 1}"><rect x="2" y="${groupY + 2}" width="${svgWidth - 4}" height="${groupHeight - 7}" rx="7" fill="${c % 2 ? '#f6f8fc' : '#ffffff'}" stroke="#e2e8f1"/><text x="${svgWidth - 12}" y="${groupY + 20}" text-anchor="end" font-size="14" font-weight="600" fill="#455a77">Course ${c + 1}</text>`;
+    content += passDrawing(output.getPass(c, 1, area.startNeedle, area.count), groupY + 24);
+    content += passDrawing(output.getPass(c, 0, area.startNeedle, area.count), groupY + 93) + '</g>';
+  }
+  for (let n = 0; n < area.count; n++) content += `<text x="${56 + n * 39}" y="${courses * groupHeight + 18}" text-anchor="middle" font-size="14" fill="#65738a">${area.startNeedle + n + 1}</text>`;
+  $('yarn-paths').innerHTML = content + '</svg>';
+}
+function selectionHelp() {
+  const code = output.codeAt(selected.course - 1, selected.needle - 1, selected.pass);
+  const yarn = selected.pass === 0 ? state.firstYarn : 1 - state.firstYarn;
+  $('chart-help').textContent = `Course ${fmt(selected.course)} · Yarn ${yarnName(yarn)} · Needle ${fmt(selected.needle)}: ${code} = ${STITCHES[code].label.toLowerCase()}.`;
+  $('selected-stitch').textContent = `Needle ${fmt(selected.needle)} · Course ${fmt(selected.course)}`;
+}
+function renderOutputs() {
+  const area = clampArea(), first = yarnName(state.firstYarn), second = yarnName(1 - state.firstYarn);
+  $('summary').textContent = `${fmt(output.width)} needles · ${fmt(output.height)} courses · ${fmt(output.outputRows)} output rows`;
+  $('read-order').textContent = `Read bottom to top · ${first}, then ${second}`;
+  const descriptions = {
+    horizontal: 'Both yarns knit on every back needle.',
+    vertical: `Yarn ${first} knits on odd back needles; Yarn ${second} knits on even back needles.`,
+    birdseye: `Yarn ${first} starts on odd back needles. The back-needle selection swaps after each design course.`,
+  };
+  $('backing-description').textContent = descriptions[state.backing];
+  const notes = [];
+  if (state.backing !== 'horizontal' && output.width % 2) notes.push('An odd width creates a stripe discontinuity if this unit is repeated horizontally.');
+  if (state.backing === 'birdseye' && output.height % 2) notes.push('For continuous bird’s-eye backing, swap the starting back needles on the next vertical repeat, or use an even height.');
+  $('repeat-note').hidden = !notes.length; $('repeat-note').textContent = notes.join(' ');
+  const largeCopy = output.width * output.outputRows > 200000;
+  $('copy').textContent = largeCopy ? 'Copy visible area' : 'Copy numbers';
+  renderChart(area); renderPaths(area); selectionHelp(); scheduleCanvas();
+}
+function renderAll() { output = createProgram(state.pattern, state); clampArea(); renderGrid(); renderOutputs(); }
+function scheduleOutputs() {
+  if (renderFrame) return;
+  renderFrame = requestAnimationFrame(() => { renderFrame = 0; renderOutputs(); });
+}
+function selectStitch(needle, course, pass = 0, showArea = true) {
+  selected.needle = needle; selected.course = course; selected.pass = pass;
+  if (showArea) {
+    view.needle = Math.floor((needle - 1) / view.width) * view.width + 1;
+    view.course = Math.floor((course - 1) / view.height) * view.height + 1;
+  }
+  renderOutputs();
+}
+function paintAt(needle, course) {
+  const key = `${course},${needle}`; if (key === lastPainted) return; lastPainted = key;
+  selected.needle = needle; selected.course = course;
+  state.pattern.data[(course - 1) * state.pattern.width + needle - 1] = state.brush;
+  scheduleOutputs(); scheduleCanvas();
+}
+function paintButton(cell) {
+  if (!cell?.classList.contains('pixel')) return;
+  paintAt(Number(cell.dataset.col) + 1, Number(cell.dataset.row) + 1); updatePixel(cell);
+}
+function canvasCell(event) {
+  const rect = $('design-canvas').getBoundingClientRect(), frame = $('design-view');
+  const needle = Math.floor((frame.scrollLeft + event.clientX - rect.left) / zoom.scale) + 1;
+  const course = state.pattern.height - Math.floor((frame.scrollTop + event.clientY - rect.top) / zoom.scale);
+  return needle >= 1 && needle <= state.pattern.width && course >= 1 && course <= state.pattern.height ? { needle, course } : null;
+}
+
+$('brush-a').addEventListener('click', () => setBrush(0));
+$('brush-b').addEventListener('click', () => setBrush(1));
+$('pattern-grid').addEventListener('pointerdown', event => {
+  const cell = event.target.closest('.pixel'); if (!cell || event.button !== 0) return;
+  event.preventDefault(); cell.focus({ preventScroll: true }); painting = true; lastPainted = ''; paintButton(cell);
+});
+window.addEventListener('pointermove', event => {
+  if (!painting) return;
+  const cell = document.elementFromPoint(event.clientX, event.clientY)?.closest('.pixel');
+  if (cell && $('pattern-grid').contains(cell)) paintButton(cell);
+});
+for (const name of ['pointerup', 'pointercancel', 'blur']) window.addEventListener(name, () => { painting = false; lastPainted = ''; });
+$('pattern-grid').addEventListener('click', event => { if (event.detail === 0) { lastPainted = ''; paintButton(event.target.closest('.pixel')); } });
+$('pattern-grid').addEventListener('keydown', event => {
+  const cell = event.target.closest('.pixel');
+  const directions = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] };
+  if (!cell || !directions[event.key]) return;
+  event.preventDefault(); const [dx, dy] = directions[event.key];
+  $('pattern-grid').querySelector(`[data-row="${Number(cell.dataset.row) + dy}"][data-col="${Number(cell.dataset.col) + dx}"]`)?.focus();
+});
+$('resize-form').addEventListener('submit', event => {
+  event.preventDefault();
+  try { state.pattern = resizePattern(state.pattern, Number($('width').value), Number($('height').value)); renderAll(); message('Design resized. Existing stitches keep their position from the bottom left.'); }
+  catch (error) { message(error.message); }
+});
+$('example').addEventListener('click', () => {
+  state.pattern = compactPattern(SAMPLE); view.needle = 1; view.course = 1; renderAll(); message('Your 6 × 6 example is loaded.');
+});
+$('fill').addEventListener('click', () => { state.pattern.data.fill(0); renderGrid(); renderOutputs(); message('Every design pixel now uses Yarn A.'); });
+document.querySelectorAll('input[name=backing]').forEach(input => input.addEventListener('change', () => {
+  state.backing = input.value; output = createProgram(state.pattern, state); renderOutputs(); message('');
+}));
+$('first-yarn').addEventListener('change', () => { state.firstYarn = Number($('first-yarn').value); output = createProgram(state.pattern, state); renderOutputs(); message(''); });
+['color-a', 'color-b'].forEach((id, i) => $(id).addEventListener('input', () => {
+  state.colors[i] = $(id).value; document.documentElement.style.setProperty(i === 0 ? '--yarn-a' : '--yarn-b', state.colors[i]);
+  $('pattern-grid').querySelectorAll('.pixel').forEach(updatePixel); renderOutputs();
+  if (photo.pending) previewPattern($('photo-preview'), photo.pending);
+}));
+$('number-chart').addEventListener('click', event => {
+  const cell = event.target.closest('button[data-output-row]'); if (!cell) return;
+  const row = Number(cell.dataset.outputRow) - 1;
+  selectStitch(Number(cell.dataset.needle), Math.floor(row / 2) + 1, row % 2, false);
+});
+$('inspection-form').addEventListener('submit', event => {
+  event.preventDefault(); view.needle = Number($('view-needle').value); view.course = Number($('view-course').value);
+  view.width = Number($('view-width').value); view.height = Number($('view-height').value); renderOutputs();
+});
+for (const [id, dx, dy] of [['area-left', -1, 0], ['area-right', 1, 0], ['area-down', 0, -1], ['area-up', 0, 1]]) {
+  $(id).addEventListener('click', () => { view.needle += dx * view.width; view.course += dy * view.height; renderOutputs(); });
+}
+$('zoom-fit').addEventListener('click', fitCanvas);
+$('zoom-in').addEventListener('click', () => setZoom(zoom.scale < 1 ? 4 : zoom.scale * 2));
+$('zoom-out').addEventListener('click', () => setZoom(zoom.scale / 2));
+$('canvas-mode').addEventListener('change', () => $('design-view').classList.toggle('paint-mode', $('canvas-mode').value === 'paint'));
+$('design-view').addEventListener('scroll', scheduleCanvas, { passive: true });
+$('design-canvas').addEventListener('pointerdown', event => {
+  if (event.button !== 0 || zoom.pointer) return;
+  const cell = canvasCell(event); if (!cell) return;
+  $('design-canvas').focus({ preventScroll: true });
+  const paint = $('canvas-mode').value === 'paint' && zoom.scale >= 4;
+  zoom.pointer = { id: event.pointerId, x: event.clientX, y: event.clientY,
+    left: $('design-view').scrollLeft, top: $('design-view').scrollTop, paint, moved: false, cell };
+  $('design-canvas').setPointerCapture(event.pointerId);
+  if (paint) { event.preventDefault(); lastPainted = ''; paintAt(cell.needle, cell.course); }
+});
+$('design-canvas').addEventListener('pointermove', event => {
+  const pointer = zoom.pointer; if (!pointer || pointer.id !== event.pointerId) return;
+  if (Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) > 5) pointer.moved = true;
+  if (pointer.paint) { const cell = canvasCell(event); if (cell) paintAt(cell.needle, cell.course); }
+  else if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
+    $('design-view').scrollLeft = pointer.left - (event.clientX - pointer.x);
+    $('design-view').scrollTop = pointer.top - (event.clientY - pointer.y);
+  }
+});
+$('design-canvas').addEventListener('pointerup', event => {
+  const pointer = zoom.pointer; if (!pointer || pointer.id !== event.pointerId) return;
+  if (!pointer.moved) {
+    selectStitch(pointer.cell.needle, pointer.cell.course);
+    if ($('canvas-mode').value === 'paint' && zoom.scale < 4) {
+      setZoom(16, { x: pointer.cell.needle - .5, y: state.pattern.height - pointer.cell.course + .5 });
+      message('Zoomed to this stitch. Tap again to paint.');
+    }
+  }
+  zoom.pointer = null; lastPainted = '';
+});
+for (const name of ['pointercancel', 'lostpointercapture']) $('design-canvas').addEventListener(name, () => { zoom.pointer = null; lastPainted = ''; });
+$('design-canvas').addEventListener('dblclick', event => { const cell = canvasCell(event); if (cell) setZoom(16, { x: cell.needle - .5, y: state.pattern.height - cell.course + .5 }); });
+$('design-canvas').addEventListener('keydown', event => {
+  const directions = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] };
+  if (directions[event.key]) {
+    event.preventDefault(); const [dx, dy] = directions[event.key];
+    selectStitch(Math.max(1, Math.min(state.pattern.width, selected.needle + dx)), Math.max(1, Math.min(state.pattern.height, selected.course + dy)));
+    if (zoom.scale >= 4) setZoom(zoom.scale, { x: selected.needle - .5, y: state.pattern.height - selected.course + .5 });
+  } else if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); lastPainted = ''; paintAt(selected.needle, selected.course); }
+  else if (event.key === '+' || event.key === '=') { event.preventDefault(); setZoom(zoom.scale < 1 ? 4 : zoom.scale * 2); }
+  else if (event.key === '-') { event.preventDefault(); setZoom(zoom.scale / 2); }
+});
+$('paint-selected').addEventListener('click', () => { lastPainted = ''; paintAt(selected.needle, selected.course); message(`Needle ${selected.needle}, course ${selected.course} now uses Yarn ${yarnName(state.brush)}.`); });
+new ResizeObserver(() => { if (!smallDesign()) { if (zoom.fit) fitCanvas(); else sizeCanvas(); } }).observe($('design-view'));
+
+function visibleNumberText() {
+  const area = clampArea(), rows = [];
+  for (let c = area.endCourse; c >= area.startCourse; c--) for (const p of [1, 0]) {
+    rows.push(output.getPass(c, p, area.startNeedle, area.count).cells.map(cell => cell.code).join('\t'));
+  }
+  return rows.join('\n');
+}
+$('copy').addEventListener('click', async () => {
+  const partial = output.width * output.outputRows > 200000;
+  const text = partial ? visibleNumberText() : [...numberRows(output)].join('\n');
+  try { await navigator.clipboard.writeText(text); message(partial ? 'Visible area copied. Download all numbers to get the complete design.' : 'All numbers copied: top row first, with course 1 at the bottom.'); }
+  catch {
+    const field = document.createElement('textarea'); field.value = text; field.setAttribute('aria-label', 'Numbers ready to copy');
+    field.style.cssText = 'width:100%;min-height:130px;margin-top:10px';
+    $('message').replaceChildren(document.createTextNode('Select and copy these numbers:'), field); field.focus(); field.select();
+  }
+});
+$('download').addEventListener('click', async () => {
+  if (exportBusy) return;
+  exportBusy = true; $('download').disabled = true; $('export-progress').hidden = false; $('export-progress').value = 0;
+  $('export-link').hidden = true;
+  const parts = []; let batch = [], lines = 0; message('Preparing every number row…');
+  try {
+    // Snapshot the pattern and settings so edits during an export cannot mix rows.
+    const program = createProgram(compactPattern(state.pattern), state), backing = state.backing;
+    for (const row of numberRows(program)) {
+      batch.push(row); lines++;
+      if (batch.length >= 32 || lines === program.outputRows) {
+        parts.push(batch.join('\n') + (lines < program.outputRows ? '\n' : '')); batch = [];
+        $('export-progress').value = Math.round(lines / program.outputRows * 100);
+        if (lines % 128 === 0) await pause();
+      }
+    }
+    const blob = new Blob(parts, { type: 'text/tab-separated-values;charset=utf-8' });
+    if (exportUrl) URL.revokeObjectURL(exportUrl);
+    exportUrl = URL.createObjectURL(blob);
+    const link = $('export-link'); link.href = exportUrl;
+    link.download = `knit-${program.width}x${program.height}-${backing}.tsv`;
+    link.hidden = false; link.click();
+    message(`Number file ready: ${fmt(program.width)} columns × ${fmt(program.outputRows)} rows. Tap Save number file if the download did not start. Course 1 is last.`);
+  } catch (error) { message(error.message || 'The export could not be prepared. Try a smaller design.'); }
+  finally { exportBusy = false; $('download').disabled = false; $('export-progress').hidden = true; }
+});
+
+$('photo-file').addEventListener('change', async () => {
+  const file = $('photo-file').files?.[0]; if (!file) return;
+  if (file.type && !file.type.startsWith('image/')) { photoStatus('Choose a JPEG, PNG or WebP photo.', true); $('photo-file').value = ''; return; }
+  const token = ++photo.token; ++photo.renderToken;
+  const url = URL.createObjectURL(file); photo.busy = true; photo.pending = null; $('photo-apply').disabled = true; photoStatus('Reading photo…');
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const element = new Image();
+      element.onload = () => element.naturalWidth && element.naturalHeight ? resolve(element) : reject(new Error('This image has no usable dimensions.'));
+      element.onerror = () => reject(new Error('This photo could not be read. Try a JPEG, PNG or WebP image.')); element.src = url;
+    });
+    if (token !== photo.token) { URL.revokeObjectURL(url); return; }
+    const size = photoSize(image.naturalWidth, image.naturalHeight), previousUrl = photo.sourceUrl;
+    photo.image = image; photo.sourceUrl = url; photo.shades = null; photo.inverted = false; photo.auto = true;
+    photo.limited = size.width !== image.naturalWidth || size.height !== image.naturalHeight;
+    $('photo-width').value = size.width; $('photo-height').value = size.height;
+    $('photo-source-size').textContent = `Uploaded photo: ${fmt(image.naturalWidth)} × ${fmt(image.naturalHeight)} pixels`;
+    $('photo-original').src = url; $('photo-original').alt = 'Selected photo: ' + file.name;
+    $('photo-original').hidden = false; $('photo-settings').hidden = false;
+    if (previousUrl) URL.revokeObjectURL(previousUrl); await refreshPhoto();
+  } catch (error) {
+    URL.revokeObjectURL(url); if (token !== photo.token) return;
+    photo.busy = false; $('photo-file').value = ''; photoStatus(error.message, true);
+  }
+});
+for (const [id, other, ratio] of [['photo-width', 'photo-height', true], ['photo-height', 'photo-width', false]]) {
+  $(id).addEventListener('input', () => {
+    photo.dirty = true;
+    $('photo-apply').disabled = true;
+    photoStatus('Tap Preview size to rebuild the photo at these dimensions.');
+  });
+  $(id).addEventListener('change', () => {
+    if (!photo.image || !$('photo-aspect').checked) return;
+    const value = Number($(id).value), aspect = photo.image.naturalHeight / photo.image.naturalWidth;
+    if (Number.isInteger(value) && value >= 1) $(other).value = Math.max(1, Math.round(ratio ? value * aspect : value / aspect));
+  });
+}
+$('photo-size-form').addEventListener('submit', event => { event.preventDefault(); photo.limited = false; refreshPhoto(); });
+$('photo-fit').addEventListener('change', refreshPhoto);
+$('photo-threshold').addEventListener('input', () => { if (photo.busy) return; photo.auto = false; photo.threshold = Number($('photo-threshold').value); renderPhotoPreview(); });
+$('photo-auto').addEventListener('click', () => { if (!photo.shades || photo.busy) return; photo.auto = true; photo.threshold = automaticSplit(photo.shades); renderPhotoPreview(); });
+$('photo-swap').addEventListener('click', () => { if (photo.busy) return; photo.inverted = !photo.inverted; renderPhotoPreview(); });
+$('photo-apply').addEventListener('click', () => {
+  if (!photo.pending || photo.busy || photo.dirty) return;
+  state.pattern = compactPattern(photo.pending); view.needle = 1; view.course = 1; selected.needle = 1; selected.course = 1;
+  $('canvas-mode').value = 'move'; $('design-view').classList.remove('paint-mode');
+  renderAll(); message('Photo applied. Inspect any area, edit stitches, or download the complete number chart.');
+});
+window.addEventListener('pagehide', () => { ++photo.renderToken; if (photo.sourceUrl) URL.revokeObjectURL(photo.sourceUrl); if (exportUrl) URL.revokeObjectURL(exportUrl); }, { once: true });
+renderAll();
+
+// A bounded chart tool remains useful for agent interaction with huge designs.
+const context = document.modelContext;
+if (context?.registerTool) {
+  const lifecycle = new AbortController(); window.addEventListener('pagehide', () => lifecycle.abort(), { once: true });
+  const register = tool => { try { Promise.resolve(context.registerTool(tool, { signal: lifecycle.signal })).catch(() => {}); } catch {} };
+  register({ name: 'read_knitting_chart', title: 'Read knitting chart',
+    description: 'Read the selected chart area and full design dimensions. Courses and rows are returned bottom to top. Select an area to inspect large designs.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false }, annotations: { readOnlyHint: true, untrustedContentHint: false },
+    execute() {
+      const area = clampArea(), pattern = [], rows = [];
+      for (let c = area.startCourse; c <= area.endCourse; c++) {
+        pattern.push(Array.from(state.pattern.data.subarray(c * output.width + area.startNeedle, c * output.width + area.startNeedle + area.count)));
+        for (const p of [0, 1]) { const pass = output.getPass(c, p, area.startNeedle, area.count); rows.push({ course: pass.course, yarn: pass.yarn, codes: pass.cells.map(cell => cell.code) }); }
+      }
+      return { width: output.width, height: output.height, outputRows: output.outputRows, startNeedle: view.needle, startCourse: view.course, pattern, rows, backing: state.backing, firstYarn: state.firstYarn };
+    }
+  });
+  register({ name: 'set_knitting_pattern', title: 'Set knitting pattern',
+    description: 'Replace a two-colour pattern. Input courses run bottom to top. Yarn A is 0 and Yarn B is 1; one course generates two number rows.',
+    inputSchema: { type: 'object', properties: {
+      pattern: { type: 'array', minItems: 1, maxItems: MAX_DESIGN_EDGE, items: { type: 'array', minItems: 1, maxItems: MAX_DESIGN_EDGE, items: { type: 'integer', enum: [0, 1] } } },
+      backing: { type: 'string', enum: ['horizontal', 'vertical', 'birdseye'] }, firstYarn: { type: 'integer', enum: [0, 1] }
+    }, required: ['pattern'], additionalProperties: false }, annotations: { readOnlyHint: false, untrustedContentHint: false },
+    execute(input) {
+      if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Provide a pattern object.');
+      if (Object.keys(input).some(key => !['pattern', 'backing', 'firstYarn'].includes(key))) throw new Error('Unknown pattern setting.');
+      const pattern = compactPattern(input.pattern), backing = input.backing ?? state.backing, firstYarn = input.firstYarn ?? state.firstYarn;
+      createProgram(pattern, { backing, firstYarn }); state.pattern = pattern; state.backing = backing; state.firstYarn = firstYarn;
+      $('first-yarn').value = String(firstYarn); view.needle = 1; view.course = 1;
+      document.querySelectorAll('input[name=backing]').forEach(radio => { radio.checked = radio.value === backing; });
+      renderAll(); message('Pattern updated.'); return { width: output.width, height: output.height, outputRows: output.outputRows, backing, firstYarn };
+    }
+  });
+}
+
+</script>
+</body>
+</html>
